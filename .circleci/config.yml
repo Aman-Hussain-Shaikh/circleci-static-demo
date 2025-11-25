@@ -1,0 +1,23 @@
+version: 2.1
+
+jobs:
+  deploy:
+    docker:
+      - image: cimg/node:18.17
+    steps:
+      - checkout
+      - run: |
+          git config --global user.email "ci@example.com"
+          git config --global user.name "CircleCI Bot"
+      - run: |
+          npm install -g gh-pages
+          gh-pages -d . -b gh-pages
+
+workflows:
+  version: 2
+  deploy_on_push:
+    jobs:
+      - deploy:
+          filters:
+            branches:
+              only: main

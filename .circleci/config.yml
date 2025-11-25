@@ -3,21 +3,26 @@ version: 2.1
 jobs:
   deploy:
     docker:
-      - image: cimg/node:18.17
+      - image: cimg/base:stable
     steps:
       - checkout
-      - run: |
-          git config --global user.email "ci-bot@example.com"
-          git config --global user.name "CircleCI Bot"
-      - run: npm install gh-pages
-      - run: |
-          npx gh-pages -d . --repo=https://$GITHUB_TOKEN@github.com/aman-hussain-shaikh/circleci-static-demo.git -b gh-pages
+
+      - run:
+          name: Configure Git
+          command: |
+            git config --global user.email "you@example.com"
+            git config --global user.name "CircleCI Bot"
+
+      - run:
+          name: Deploy to GitHub Pages
+          command: |
+            echo "Deploying..."
+            git remote set-url origin https://$GITHUB_TOKEN@github.com/Aman-Hussain-Shaikh/circleci-static-demo.git
+            git add .
+            git commit -m "CircleCI Deploy $(date)" || echo "No changes"
+            git push origin main
 
 workflows:
-  version: 2
-  deploy_on_push:
+  deploy-site:
     jobs:
-      - deploy:
-          filters:
-            branches:
-              only: main
+      - deploy

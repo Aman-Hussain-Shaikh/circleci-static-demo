@@ -7,11 +7,10 @@ jobs:
     steps:
       - checkout
       - run: |
-          git config --global user.email "ci@example.com"
+          git config --global user.email "ci-bot@example.com"
           git config --global user.name "CircleCI Bot"
-      - run: |
           npm install -g gh-pages
-          gh-pages -d . -b gh-pages
+          gh-pages -d . --repo=https://$GITHUB_TOKEN@github.com/aman-hussain-shaikh/circleci-static-demo.git -b gh-pages
 
 workflows:
   version: 2
